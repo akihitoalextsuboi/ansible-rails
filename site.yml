@@ -1,0 +1,5 @@
+- name: Install rails env
+  hosts: web
+  sudo: yes
+  roles:
+    - common

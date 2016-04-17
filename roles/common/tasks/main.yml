@@ -1,0 +1,14 @@
+- name: Update yum packages
+  yum: name=*
+
+- name: Install basic packages
+  yum: name={{ item }}
+  with_items: 
+    - wget
+    - git
+    - make
+    - vim
+    - gcc
+    - gcc-c++
+    - zlib-devel
+    - openssl-devel
