@@ -1,0 +1,13 @@
+- name: install postgresql
+  yum: name={{ item }}
+  with_items:
+    - postgresql93-devel
+    - postgresql93-server
+    - postgresql93-contrib
+
+- name: initialize postgresql
+  shell: service postgresql-9.3 initdb
+
+- name: start postgresql
+  service: name=postgresql-9.3 state=started enabled=yes
+
