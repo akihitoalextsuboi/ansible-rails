@@ -1,0 +1,7 @@
+- name: install imagemagick
+  yum: name={{ item }}
+  with_items:
+    - libjpeg-devel 
+    - libpng-devel
+    - ImageMagick
+    - ImageMagick-devel

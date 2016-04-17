@@ -1,9 +1,9 @@
 - include: ruby.yml
 - include: nginx.yml
 - include: postgresql.yml
+- include: imagemagick.yml
 
-- name: install bundler and rails
+- name: install rails
   gem: name={{ item }}
   with_items:
-    - bundler
     - rails

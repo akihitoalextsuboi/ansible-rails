@@ -1,5 +1,8 @@
 - name: install nginx
   yum: name=nginx
 
+- name: setting unicorn conf
+  template: src=nginx.conf dest=/etc/nginx/conf.d/nginx.conf owner=root group=root mode=0644
+
 - name: start nginx
   service: name=nginx state=started enabled=yes

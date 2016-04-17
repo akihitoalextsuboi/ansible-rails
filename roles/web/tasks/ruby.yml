@@ -1,17 +1,88 @@
-- name: install rbenv
-  git: repo=https://github.com/sstephenson/rbenv.git dest=~/.rbenv
+- name: Install rbenv
+  git:
+    repo: "https://github.com/sstephenson/rbenv.git"
+    dest: "~/.rbenv"
+    depth: 1
+  become: yes
+  become_user: "{{ rbenv_user }}"
 
-- name: setup rbenv
-  shell: /bin/bash -lc "echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile"
+- name: Install ruby-build
+  git:
+    repo: "https://github.com/sstephenson/ruby-build.git"
+    dest: "~/.rbenv/plugins/ruby-build"
+    depth: 1
+  become: yes
+  become_user: "{{ rbenv_user }}"
 
-- name: initialize rbenv
-  shell: /bin/bash -lc "echo 'eval "$(rbenv init -)"' >> ~/.bash_profile"
+- name: Ensure {{ rbenv_shell_rc }} exists
+  shell: "touch {{ rbenv_shell_rc }}"
+  args:
+    creates: "{{ rbenv_shell_rc }}"
+  become: true
+  become_user: "{{ rbenv_user }}"
 
-- name: install ruby-build
-  git: repo=https://github.com/sstephenson/ruby-build.git dest=~/.rbenv/plugins/ruby-build
+- name: Export RBENV_ROOT in {{ rbenv_shell_rc }}
+  lineinfile:
+    dest: "{{ rbenv_shell_rc }}"
+    regexp: "^export RBENV_ROOT="
+    line: "export RBENV_ROOT=~/.rbenv"
+  become: true
+  become_user: "{{ rbenv_user }}"
 
-- name: setup ruby-build
-  shell: /bin/bash -lc "sudo ~/.rbenv/plugins/ruby-build/install.sh"
+- name: Put rbenv in users PATH in {{ rbenv_shell_rc }}
+  lineinfile:
+    dest: "{{ rbenv_shell_rc }}"
+    regexp: "^PATH=\\$PATH:\\$RBENV_ROOT/bin"
+    line: "PATH=$PATH:$RBENV_ROOT/bin"
+  become: true
+  become_user: "{{ rbenv_user }}"
 
-- name: install ruby
-  shell: /bin/bash -lc "rbenv install {{ ruby_version }} && rbenv rehash && rbenv global {{ ruby_version }}"
+- name: Put $RBENV_ROOT/shims in users $PATH in {{ rbenv_shell_rc }}
+  lineinfile:
+    dest: "{{ rbenv_shell_rc }}"
+    regexp: "^PATH=\\$RBENV_ROOT/shims:\\$PATH"
+    line: "PATH=$RBENV_ROOT/shims:$PATH"
+  become: true
+  become_user: "{{ rbenv_user }}"
+
+- name: Install Rubies
+  shell: "~/.rbenv/bin/rbenv install {{ ruby_version }}"
+  args:
+    creates: "~/.rbenv/versions/{{ ruby_version }}"
+  become: yes
+  become_user: "{{ rbenv_user }}"
+  with_flattened:
+  - "{{ rbenv_rubies }}"
+  - "{{ rbenv_default }}"
+
+- name: Check default ruby
+  shell: '~/.rbenv/bin/rbenv version | grep -oE "^[^ ]+"'
+  changed_when: no
+  register: rbenv_current_version
+  become: yes
+  become_user: "{{ rbenv_user }}"
+
+- name: Set default ruby
+  shell: "~/.rbenv/bin/rbenv global {{ ruby_version }}"
+  become: yes
+  become_user: "{{ rbenv_user }}"
+  when: rbenv_current_version.stdout != ruby_version
+
+- name: Check for Bundler
+  shell: '~/.rbenv/bin/rbenv exec bundle'
+  failed_when: no
+  changed_when: no
+  register: rbenv_bundle_available
+  become: yes
+  become_user: "{{ rbenv_user }}"
+
+- name: Install Bundler
+  shell: "~/.rbenv/shims/gem install bundler"
+  become: yes
+  become_user: "{{ rbenv_user }}"
+  when: rbenv_bundle_available.rc != 0 and rbenv_bundle_available.rc != 10
+
+- name: facts
+  set_fact:
+    RUBY_PREFIX: '/home/{{ rbenv_user }}/.rbenv/bin/rbenv exec '
+    RUBY_BIN: '/home/{{ rbenv_user }}/.rbenv/shims/ruby'

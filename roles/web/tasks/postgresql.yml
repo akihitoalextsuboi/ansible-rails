@@ -1,12 +1,18 @@
 - name: install postgresql
   yum: name={{ item }}
   with_items:
-    - postgresql93-devel
-    - postgresql93-server
-    - postgresql93-contrib
+    - postgresql-devel
+    - postgresql-server
+    - postgresql-contrib
 
 - name: initialize postgresql
-  shell: service postgresql-9.3 initdb
+  shell:  pg_ctl -D /usr/local/pgsql/data initdb
+
+- name: backup pg_hba.conf
+  shell: mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.default
+
+- name: pg_hba.conf setting
+  copy: src=pg_hba.conf dest=/var/lib/pgsql/data/9.3/pg_hba.conf owner=postgres group=postgres mode=0600
 
 - name: start postgresql
   service: name=postgresql-9.3 state=started enabled=yes
