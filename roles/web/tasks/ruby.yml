@@ -47,18 +47,18 @@
 
 - name: Install Rubies
   shell: "~/.rbenv/bin/rbenv install {{ ruby_version }}"
-  args:
-    creates: "~/.rbenv/versions/{{ ruby_version }}"
-  become: yes
+  become: true
   become_user: "{{ rbenv_user }}"
-  with_flattened:
-  - "{{ rbenv_rubies }}"
-  - "{{ rbenv_default }}"
 
 - name: Check default ruby
   shell: '~/.rbenv/bin/rbenv version | grep -oE "^[^ ]+"'
   changed_when: no
   register: rbenv_current_version
+  become: yes
+  become_user: "{{ rbenv_user }}"
+
+- name: rehash ruby setting
+  shell: "~/.rbenv/bin/rbenv rehash"
   become: yes
   become_user: "{{ rbenv_user }}"
 
