@@ -10,11 +10,11 @@
   become: true
   become_user: "postgres"
 
-- name: backup pg_hba.conf
-  shell: mv /var/lib/pgsql95/data/pg_hba.conf /var/lib/pgsql95/data/pg_hba.conf.default
+# - name: backup pg_hba.conf
+#   shell: mv /var/lib/pgsql95/data/pg_hba.conf /var/lib/pgsql95/data/pg_hba.conf.default
 
-- name: pg_hba.conf setting
-  copy: src=pg_hba.conf dest=/var/lib/pgsql95/data/pg_hba.conf owner=postgres group=postgres mode=0600
+# - name: pg_hba.conf setting
+#   copy: src=pg_hba.conf dest=/var/lib/pgsql95/data/pg_hba.conf owner=postgres group=postgres mode=0600
 
 - name: start postgresql
   service: name=postgresql95 state=started enabled=yes
