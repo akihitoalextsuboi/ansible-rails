@@ -45,6 +45,10 @@
   become: true
   become_user: "{{ rbenv_user }}"
 
+# - name: check file exists
+#   stat: path=/home/deploy/.rbenv/versions/{{ruby-version}}/
+#   register: ruby_ver
+
 - name: Install Rubies
   shell: "~/.rbenv/bin/rbenv install {{ ruby_version }}"
   become: true

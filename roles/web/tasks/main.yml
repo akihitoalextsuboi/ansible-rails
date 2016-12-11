@@ -4,6 +4,9 @@
 - include: imagemagick.yml
 
 - name: install rails
-  gem: name={{ item }}
-  with_items:
-    - rails
+  shell: "~/.rbenv/shims/gem install rails"
+  # gem: name={{ item }}
+  # with_items:
+  #   - rails
+  become: yes
+  become_user: "{{ rbenv_user }}"
