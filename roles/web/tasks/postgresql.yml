@@ -7,8 +7,8 @@
 
 - name:  initialize postgresql95
   shell: service postgresql95 initdb
-  become: true
-  become_user: "postgres"
+#   become: true
+#   become_user: "postgres"
 
 # - name: backup pg_hba.conf
 #   shell: mv /var/lib/pgsql95/data/pg_hba.conf /var/lib/pgsql95/data/pg_hba.conf.default
