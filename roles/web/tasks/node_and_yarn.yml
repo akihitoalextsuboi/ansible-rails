@@ -1,5 +1,5 @@
 - name: Install node
-  shell: "curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -"
+  shell: "curl --silent --location https://rpm.nodesource.com/setup_7.x | bash -"
   become: yes
   become_user: "{{ rbenv_user }}"
     
