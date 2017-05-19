@@ -1,4 +1,4 @@
-- include: node.yml
+- include: node_and_yarn.yml
 - include: ruby.yml
 - include: nginx.yml
 - include: postgresql.yml
