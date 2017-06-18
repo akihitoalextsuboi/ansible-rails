@@ -1,4 +1,4 @@
 rails_root: rails_app
-ruby_version: 2.3.3
+ruby_version: 2.4.1
 rbenv_shell_rc: .bash_profile
 rbenv_user: vagrant
