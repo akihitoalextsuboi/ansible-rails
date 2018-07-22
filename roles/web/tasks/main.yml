@@ -3,12 +3,12 @@
 - include: postgresql.yml
 - include: imagemagick.yml
 
-- name: install rails
-  shell: "~/.rbenv/shims/gem install rails"
-  # gem: name={{ item }}
-  # with_items:
-  #   - rails
-  become: yes
-  become_user: "{{ rbenv_user }}"
+  # - name: install rails
+  #   shell: "~/.rbenv/shims/gem install rails"
+  #   # gem: name={{ item }}
+  #   # with_items:
+  #   #   - rails
+  #   become: yes
+  #   become_user: "{{ rbenv_user }}"
 
 - include: nginx.yml
