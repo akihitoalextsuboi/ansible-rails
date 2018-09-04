@@ -28,6 +28,12 @@ $ sudo -u postgres psql
 create user deploy with password 'deploy';
 alter role deploy createdb;
 you might be needed to drop template
+UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+DROP DATABASE template1;
+CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UNICODE';
+UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template1';
+\c template1
+VACUUM FREEZE;
 ```
 鍵をgithubに追加
 ```
@@ -35,3 +41,21 @@ install dotenv in rails
 add .env file
 add .env settings about DATABASE and secret_key_base
 ```
+
+```
+bitbucketに鍵を登録
+```
+```
+webpackerのinstall
+capistranoのinstall
+database.ymlを設定して.envに
+DATABASE_USERNAME
+DATABASE_PASSWORD
+RAILS_MASTER_KEY
+の設定
+```
+https://yarnpkg.com/en/docs/install#centos-stable
+yum remove nodesource-release* nodejs
+yum clean all
+rm -rf /var/cache/yum/*
+rm /etc/yum.repos.d/nodesource-el.repo
