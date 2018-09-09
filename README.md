@@ -37,6 +37,10 @@ VACUUM FREEZE;
 ```
 鍵をgithubに追加
 ```
+rails master keyの取得
+/config/master.key
+```
+```
 install dotenv in rails
 add .env file
 add .env settings about DATABASE and secret_key_base
@@ -51,7 +55,7 @@ capistranoのinstall
 database.ymlを設定して.envに
 DATABASE_USERNAME
 DATABASE_PASSWORD
-RAILS_MASTER_KEY
+RAILS_MASTER_KEY or SECRET_KEY_BASE
 の設定
 ```
 https://yarnpkg.com/en/docs/install#centos-stable
